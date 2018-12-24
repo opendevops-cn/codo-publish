@@ -1,3 +1,4 @@
+
 # codo-publish
 
 > codo平台发布示例，支持服务器发布和Bucket发布，只有后端代码逻辑，所有的配置信息都是从前端传过来的。
@@ -34,8 +35,9 @@ API_URL = 'gw.opendevops.cn'
 
 ### 效果图
 - 发布应用配置信息
-- PUBLISH_NAME： 发布应用名称，平台系统变量自动传入
-- PUBLISH_TAG： 发布TAG名称，平台系统变量自动传入
+- FLOW_ID : 提交发布生成的ID，平台系统变量自动传入(可无视)
+- PUBLISH_NAME： 发布应用名称，平台系统变量自动传入(可无视)
+- PUBLISH_TAG： 发布TAG名称，平台系统变量自动传入(可无视)
 
 ![PublishApp](images/publish_edit.png)
 - 提交发布
@@ -44,13 +46,14 @@ API_URL = 'gw.opendevops.cn'
 
 
 - 处理过程
+
 **服务器发布逻辑**
 
 ![server_publish_list](images/server_publish_list.png)
 
 **OSS发布逻辑**
 
-![server_publish_list](images/server_publish_list.png)
+![server_publish_list](images/oss_publish_list.png)
 
 **COS发布逻辑**
 
