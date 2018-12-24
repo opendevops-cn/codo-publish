@@ -1,0 +1,7 @@
+requests
+fire
+paramiko
+pyotp
+coscmd
+oss2
+awscli
