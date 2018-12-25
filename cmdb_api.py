@@ -9,19 +9,15 @@
 import pyotp
 import requests
 import json
-from settings import API_URL
+from settings import api_gw, cmdb_info
 
 
 class CMDB_API():
     def __init__(self):
-        # self.url = 'http://gw.domain.com'
-        # self.user = 'user'
-        # self.pwd = 'passwd'
-        # self.key = 'key'
-        self.url = API_URL
-        self.user = 'cmdb'
-        self.pwd = 'GpJSWhgZs8hfDLR'
-        self.key = 'O42EEODGMFHGMYT2ONMFKN3HJVBE4Z3CKI3TKRDHG5MWSUCGMNHEE6LI'
+        self.url = api_gw
+        self.user = cmdb_info.get('user')
+        self.pwd = cmdb_info.get('password')
+        self.key = cmdb_info.get('key')
 
     @property
     def get_mfa(self):
@@ -63,8 +59,6 @@ class CMDB_API():
         except Exception as e:
             print('[Error:] CMDB获取机器信息失败，错误信息：{}'.format(e))
             exit(-2)
-
-
 
 # if __name__ == '__main__':
 #     obj = CMDB_API()

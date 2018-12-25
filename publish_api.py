@@ -9,21 +9,15 @@
 import pyotp
 import requests
 import json
-from settings import API_URL
+from settings import api_gw, publish_info
 
 
 class Publish_API():
     def __init__(self):
-        # self.url = 'http://gw.domain.com'
-        # self.user = 'user'
-        # self.pwd = 'passwd'
-        # self.key = 'key'
-        self.url = API_URL
-        self.user = 'publish'
-        self.pwd = 'shenshuo'
-        self.key = 'JJFTQNLXHBYWSVSCINNEWNDFJRKWGY2UNJTTSVTLMN3UGUKXPFDE4NDH'
-
-
+        self.url = api_gw
+        self.user = publish_info.get('user')
+        self.pwd = publish_info.get('password')
+        self.key = publish_info.get('key')
 
     @property
     def get_mfa(self):
@@ -50,7 +44,8 @@ class Publish_API():
         token = self.login()
         try:
             params = {'key': 'publish_name', 'value': publish_name}
-            res = requests.get('%s/task/v2/task_other/publish_cd/' % self.url, params=params, cookies=dict(auth_key=token))
+            res = requests.get('%s/task/v2/task_other/publish_cd/' % self.url, params=params,
+                               cookies=dict(auth_key=token))
             ret = json.loads(res.content)
             if ret['code'] == 0: return ret['data']
         except Exception as e:
