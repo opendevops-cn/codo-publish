@@ -28,9 +28,9 @@ mkdir -p /opt/ops_scripts
 cd /opt/ops_scripts && git clone https://github.com/opendevops-cn/codo-publish.git
 cd codo-publish && pip3 install -r requirements.txt
 
-##修改对应settings里面API地址，API网关地址
+##修改对应settings里面API网关地址，用户密码信息
 vim settings.py
-API_URL = 'gw.opendevops.cn'
+api_gw = 'gw.opendevops.cn'
 ```
 
 ### 效果图
