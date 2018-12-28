@@ -25,12 +25,13 @@
 ```
 ##将代码放到/opt/ops_scripts目录下，后续平台要使用到
 mkdir -p /opt/ops_scripts
+yum install sshpass -y
 cd /opt/ops_scripts && git clone https://github.com/opendevops-cn/codo-publish.git
 cd codo-publish && pip3 install -r requirements.txt
 
 ##修改对应settings里面API网关地址，用户密码信息
 vim settings.py
-api_gw = 'gw.opendevops.cn'
+api_gw = 'http://gw.opendevops.cn/api'
 ```
 
 ### 效果图
