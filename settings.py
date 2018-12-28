@@ -7,7 +7,7 @@
 
 
 # 系统配置中的API地址,网关地址
-api_gw = 'gw.opendevops.cn/api'
+api_gw = 'http://gw.opendevops.cn/api'
 
 # 发布接口账户密码
 publish_info = {

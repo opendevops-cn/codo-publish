@@ -78,9 +78,10 @@ class UploadCode():
             # 同步完成删除/tmp/repo_name目录
             print('[Success]: rsync host:{} to /tmp/{} sucess...'.format(ip, self.repo_name))
         else:
+            os.mknod('{}'.format(sys.argv[0]))
             print('[Error]: rsync host:{} to /tmp/{} faild, please check your ip,port,user,password...'.format(ip,
                                                                                                                self.repo_name))
-            exit(-407)
+
 
     def delete_tmp(self):
         """删除临时代码目录"""
