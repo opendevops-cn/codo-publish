@@ -26,7 +26,7 @@ class BackupCode():
         self.repo_name = self.repository.split('/')[-1].replace('.git', '')  # 仓库名字
         self.local_dir = '/tmp/'
         self.backup_dir = '/tmp/code_backup/'
-        self.uuid_file = '/tmp/publish_{}'.format(uuid.uuid1())  # 错误判断该使用
+        self.uuid_file = '/tmp/publish_{}'.format(uuid.uuid1())  # 错误判断该使用。
 
     def code_backup(self, host):
         """

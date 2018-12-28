@@ -11,6 +11,7 @@ import sys
 
 Base_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(Base_DIR)
+import uuid
 from public import exec_shell
 from public import exec_thread
 from get_publish_info import get_publish_data, get_all_hosts
@@ -23,6 +24,7 @@ class DeployCode():
         self.publish_path = data.get('publish_path')  # 发布目录
         self.repository = data.get('repository')  # 代码仓库
         self.repo_name = self.repository.split('/')[-1].replace('.git', '')  # 仓库名字
+        self.uuid_file = '/tmp/publish_{}'.format(uuid.uuid1())  #错误文件判断用。
 
     def code_deploy(self, host):
         if not isinstance(host, dict):
@@ -54,6 +56,7 @@ class DeployCode():
             if depoly_status == 0:
                 print('[Success]: Host:{} 发布成功'.format(ip))
             else:
+                os.mknod(self.uuid_file)
                 print('[Error]: Host:{} 失败，错误信息: {}'.format(ip, depoly_output))
                 exit(-3)
 

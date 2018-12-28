@@ -12,6 +12,7 @@ import sys
 Base_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(Base_DIR)
 import shutil
+import uuid
 from public import exec_shell
 from public import exec_thread
 from get_publish_info import get_publish_data, get_all_hosts
@@ -30,6 +31,7 @@ class UploadCode():
         self.repository = data.get('repository')  # 代码仓库
         self.repo_name = self.repository.split('/')[-1].replace('.git', '')  # 仓库名字
         self.local_dir = '/tmp/'
+        self.uuid_file = '/tmp/publish_{}'.format(uuid.uuid1())   #错误判断该使用。
 
     def code_process(self, exclude_file):
         '''代码处理，如过滤，处理完放到编译主机/tmp'''
@@ -78,12 +80,14 @@ class UploadCode():
             # 同步完成删除/tmp/repo_name目录
             print('[Success]: rsync host:{} to /tmp/{} sucess...'.format(ip, self.repo_name))
         else:
-            os.mknod('{}'.format(sys.argv[0]))
-            print('[Error]: rsync host:{} to /tmp/{} faild, please check your ip,port,user,password...'.format(ip,
-                                                                                                               self.repo_name))
-
+            os.mknod(self.uuid_file)
+            print('[Error]: rsync host:{} falied '.format(ip))
 
     def delete_tmp(self):
+        ##判断上部同步是否成功
+        if os.path.exists(self.uuid_file):
+            print('[Error]: 同步失败')
+            exit(-1)
         """删除临时代码目录"""
         tmp_path = '/tmp/{}'.format(self.repo_name)
         if os.path.exists(tmp_path):
