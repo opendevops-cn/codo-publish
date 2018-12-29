@@ -42,8 +42,8 @@ class BackupCode():
         password = host.get('password')
         code_path = self.publish_path + self.repo_name
         try:
-            backup_cmd = '[ ! -d "{}" ] && mkdir {} ; cp -aR {} {} && echo success'.format(
-                self.backup_dir, self.backup_dir, code_path, self.backup_dir)
+            backup_cmd = '[ ! -d "{}" ] &&  mkdir {} ; [ ! -d "{}" ] && mkdir {} ; cp -aR {} {} && echo success'.format(
+                self.backup_dir, self.backup_dir, code_path, code_path, code_path, self.backup_dir)
             ssh_cmd = "sshpass -p {} ssh -p {} -o StrictHostKeyChecking=no {}@{} '{}'".format(password, port, user,
                                                                                               ip,
                                                                                               backup_cmd)
@@ -58,6 +58,11 @@ class BackupCode():
             print(e)
             exit(-500)
 
+    def check_err(self):
+        if os.path.exists(self.uuid_file):
+            print('[Error]')
+            exit(-1)
+
 
 def main(flow_id):
     print('[INFO]: 这部分是备份你目标主机的代码,只保留一天备份，若不需要可以跳过此步骤')
@@ -65,6 +70,7 @@ def main(flow_id):
     obj = BackupCode(data)
     all_hosts = get_all_hosts(flow_id)
     exec_thread(func=obj.code_backup, iterable1=all_hosts)
+    obj.check_err()
 
 
 if __name__ == '__main__':

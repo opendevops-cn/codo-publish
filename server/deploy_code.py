@@ -64,12 +64,18 @@ class DeployCode():
             print(e)
             exit(-500)
 
+    def check_err(self):
+        if os.path.exists(self.uuid_file):
+            print('[Error]')
+            exit(-1)
+
 def main(flow_id):
     print('[INFO]: 这部分是将代码正式下发/同步到你的代码目录')
     data = get_publish_data(flow_id)  # 获取发布信息
     obj = DeployCode(data)
     all_hosts = get_all_hosts(flow_id)
     exec_thread(func=obj.code_deploy, iterable1=all_hosts)
+    obj.check_err()
 
 
 if __name__ == '__main__':

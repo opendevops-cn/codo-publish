@@ -84,15 +84,15 @@ class UploadCode():
             print('[Error]: rsync host:{} falied '.format(ip))
 
     def delete_tmp(self):
-        ##判断上部同步是否成功
-        if os.path.exists(self.uuid_file):
-            print('[Error]: 同步失败')
-            exit(-1)
         """删除临时代码目录"""
         tmp_path = '/tmp/{}'.format(self.repo_name)
         if os.path.exists(tmp_path):
             shutil.rmtree(tmp_path)
 
+    def check_err(self):
+        if os.path.exists(self.uuid_file):
+            print('[Error]')
+            exit(-1)
 
 def get_exclude_file(data):
     '''获取exclude文件内容写入临时文件,前端传来的只是字符串'''
@@ -126,7 +126,7 @@ def main(flow_id):
     all_hosts = get_all_hosts(flow_id)
     exec_thread(func=obj.rsync_tmp, iterable1=all_hosts)
     obj.delete_tmp()
-
+    obj.check_err()
 
 if __name__ == '__main__':
     fire.Fire(main)
