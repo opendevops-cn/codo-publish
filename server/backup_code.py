@@ -42,7 +42,7 @@ class BackupCode():
         password = host.get('password')
         code_path = self.publish_path + self.repo_name
         try:
-            backup_cmd = '[ ! -d "{}" ] &&  mkdir {} ; [ ! -d "{}" ] && mkdir {} ; cp -aR {} {} && echo success'.format(
+            backup_cmd = '[ ! -d "{}" ] &&  mkdir -p {} ; [ ! -d "{}" ] && mkdir -p {} ; cp -aR {} {} && echo success'.format(
                 self.backup_dir, self.backup_dir, code_path, code_path, code_path, self.backup_dir)
             ssh_cmd = "sshpass -p {} ssh -p {} -o StrictHostKeyChecking=no {}@{} '{}'".format(password, port, user,
                                                                                               ip,
