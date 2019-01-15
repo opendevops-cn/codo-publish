@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss1917--do-cron
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ss1917--do-cron
+  template:
+    metadata:
+      labels:
+        app: ss1917--do-cron
+    spec:
+      containers:
+      - name: ss1917--do-cron
+        image:  harbor.xx.com/shinezonetest/ss1917--do_cron:v0.20181226R1
+        imagePullPolicy: IfNotPresent
+#        lifecycle:
+#          postStart:
+#            exec:
+#              command: ['/bin/sh', '-c', 'sed -i "s/s_hostname/$(hostname)/" /data1/www/templates/app.html']
+        ports:
+        - name: http
+          containerPort: 80
+        volumeMounts:
+            - name: cronconf
+              mountPath: /var/www/do_cron/settings.py
+              subPath: settings.py  #以文件的形式挂载
+              readOnly: true
+        #    - name: cronnginx
+        #      mountPath: /etc/nginx/conf.d/
+
+      volumes:
+        - name: cronconf
+          configMap:
+            name: cron-conf   #configmap要提前创建好  kubectl create configmap cmdb-conf --from-file=./cmdb.conf -n qa
+        #- name: cronnginx
+        #  configMap:
+        #    name: cron-nginx-conf  # kubectl create configmap cmdb-nginx-conf --from-file=./nginx_cmdb.conf -n qa
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ss1917--do-cron       #k8s内网对应的域名为 codo-cmdb.qa.svc.cluster.local
+  labels:
+    app: ss1917--do-cron
+spec:
+  selector:
+    app: ss1917--do-cron
+  #type: NodePort
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+
+---
+# api不需要通过ingress反代到外网
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ss1917--do-cron-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: ops-cron.xx.net.cn
+    http:
+      paths:
+      - path:
+        backend:
+          serviceName: ss1917--do-cron
+          servicePort: 80
